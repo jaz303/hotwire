@@ -47,7 +47,7 @@ class DeferredInstanceRegistration {
     }
 
     public function lazy() { return $this; }
-    public function factory() { throw new \Exception("Can't create a factory for an instance"); }
+    public function factory() { throw new \Exception("Can't create a factory for a deferred instance"); }
 }
 
 class Container implements \Psr\Container\ContainerInterface {
