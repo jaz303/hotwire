@@ -90,18 +90,18 @@ $C->register(MyClass::class, static function($C) {
 
 ## Documentation
 
-### `$container = new Hotwire\Container()`
+### `$C = new Hotwire\Container()`
 
 ### `$C->register(string $name, callable $factory)`
 
 ### `$C->registerSingleton(string $name, mixed $factory)`
 
-### `$C->has($key)`
+### `$C->has(string $key)`
 
-### `$C->get($key)`
+### `$C->get(string $key)`
 
-### `$C->lazy($key)`
+### `$C->lazy(string $key)`
 
-### `$C->factory($key)`
+### `$C->factory(string $key)`
 
-### `$C->__get($key)`
+### `$C->__get(string $key)`
