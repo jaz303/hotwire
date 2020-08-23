@@ -85,7 +85,7 @@ class ContainerTest extends TestCase {
     }
 
     //
-    // Lazy
+    // Lazy (factory)
 
     public function testLazyFactoryDoesNotInstantiateUntilInvoked() {
         $called = false;
@@ -122,6 +122,35 @@ class ContainerTest extends TestCase {
         $t2 = $lazy();
 
         $this->assertTrue($t1 === $t2);
+    }
+
+    //
+    // Lazy (singleton factory)
+
+    public function testLazySingletonFactoryReturnsInstance() {
+        $thing = new Thing;
+        $this->C->registerSingleton('lazySingleton', static function() {
+            return new Thing;
+        });
+        
+        $instance = $this->C->lazySingleton;
+
+        $lazy = $this->C->lazy('lazySingleton');
+        $lazy1 = $lazy();
+        $lazy2 = $lazy();
+
+        $this->assertTrue($instance === $lazy1);
+        $this->assertTrue($instance === $lazy2);
+    }
+
+    //
+    // Lazy (singleton instance)
+
+    public function testLazySingletonReturnsInstance() {
+        $thing = new Thing;
+        $this->C->registerSingleton('lazySingletonInstance', $thing);
+        $lazy = $this->C->lazy('lazySingletonInstance');
+        $this->assertTrue($lazy() === $thing);
     }
 
     //
