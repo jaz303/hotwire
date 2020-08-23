@@ -54,10 +54,12 @@ class Container implements \Psr\Container\ContainerInterface {
     private $registrations = [];
     
     public function register(string $key, callable $factory) {
+        $this->duplicateCheck($key);
         $this->registrations[$key] = new FactoryRegistration($this, $factory);
     }
 
     public function registerSingleton(string $key, $thing) {
+        $this->duplicateCheck($key);
         if (is_callable($thing)) {
             $this->registrations[$key] = new DeferredInstanceRegistration($this, $thing);
         } else {
@@ -90,5 +92,11 @@ class Container implements \Psr\Container\ContainerInterface {
             throw new RegistrationNotFoundException();
         }
         return $this->registrations[$k];
+    }
+
+    private function duplicateCheck($key) {
+        if (isset($this->registrations[$key])) {
+            throw new DuplicateRegistrationException();
+        }
     }
 }

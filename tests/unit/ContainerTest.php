@@ -19,6 +19,16 @@ class ContainerTest extends TestCase {
         $this->assertFalse($this->C->has('quux'));
     }
 
+    public function testDuplicateRegistrationThrows() {
+        $this->C->registerSingleton('dup', new Thing);
+        try {
+            $this->C->registerSingleton('dup', new Thing);
+            $this->fail("shouldn't get here");
+        } catch (DuplicateRegistrationException $e) {
+            $this->assertTrue(true);
+        }
+    }
+
     public function testHasReturnsTrueWithRegistration() {
         $this->C->registerSingleton('moose', new Thing);
         $this->assertTrue($this->C->has('moose'));
