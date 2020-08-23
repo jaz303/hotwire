@@ -92,16 +92,30 @@ $C->register(MyClass::class, static function($C) {
 
 ### `$C = new Hotwire\Container()`
 
-### `$C->register(string $name, callable $factory)`
+Create a new container instance.
 
-### `$C->registerSingleton(string $name, mixed $factory)`
+### `$C->register(string $key, callable $factory)`
 
-### `$C->has(string $key)`
+Register a factory dependency. `$factory` will be called each time an instance of `$key` is requested from the container, and its return value returned.
 
-### `$C->get(string $key)`
+### `$C->registerSingleton(string $key, mixed $factoryOrInstance)`
+
+Register a singleton dependency. If `$factoryOrInstance` is a callable it is used as a factory function that is called the first time `$key` is requested from the container; otherwise `$factoryOrInstance` is the dependency itself.
+
+### `$C->has($key)`
+
+Returns `true` if a registration exists for the given `$key`, `false` otherwise.
+
+### `$C->get($key)`
+
+Request an instance of `$key` from the container.
+
+Throws `RegistrationNotFoundException` if no registration for `$key` exists.
 
 ### `$C->lazy(string $key)`
 
 ### `$C->factory(string $key)`
 
 ### `$C->__get(string $key)`
+
+Equivalent to `$C->get($key)`.
