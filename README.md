@@ -52,3 +52,38 @@ $C->register(UserEditor::class, static function($C) {
 // Create a UserEditor instance
 $userEditor = $C->get(UserEditor::class);
 ```
+
+### Lazy Dependencies
+
+```php
+<?php
+class MyClass {
+    private $dep;
+    
+    // $lazyExpensiveDependency is a callable that will create an
+    // on-demand instance of ExpensiveDep. Successive calls will
+    // return the same instance.
+    public function __construct($lazyExpensiveDependency) {
+        $this->dep = $lazyExpensiveDependency;
+    }
+
+    public function doSomethingWithDependency() {
+        // Create instance of dependency.
+        $instance = ($this->dep)();
+        $instance->doWork();
+    }
+}
+
+
+$C->register(ExpensiveDep::class, static function() {
+    $instance = new ExpensiveDep;
+    // ... do expensive set up ...
+    return $instance;
+});
+
+$C->register(MyClass::class, static function($C) {
+    return new MyClass($C->lazy(ExpensiveDep::class));
+});
+```
+
+### Factory Dependencies
