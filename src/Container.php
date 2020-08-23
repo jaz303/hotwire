@@ -53,15 +53,15 @@ class DeferredInstanceRegistration {
 class Container implements \Psr\Container\ContainerInterface {
     private $registrations = [];
     
-    public function register($name, $factory) {
-        $this->registrations[$name] = new FactoryRegistration($this, $factory);
+    public function register(string $key, callable $factory) {
+        $this->registrations[$key] = new FactoryRegistration($this, $factory);
     }
 
-    public function registerSingleton($name, $thing) {
+    public function registerSingleton(string $key, $thing) {
         if (is_callable($thing)) {
-            $this->registrations[$name] = new DeferredInstanceRegistration($this, $thing);
+            $this->registrations[$key] = new DeferredInstanceRegistration($this, $thing);
         } else {
-            $this->registrations[$name] = new InstanceRegistration($thing);
+            $this->registrations[$key] = new InstanceRegistration($thing);
         }
     }
 
@@ -73,15 +73,15 @@ class Container implements \Psr\Container\ContainerInterface {
         return $this->find($key)();
     }
 
-    public function lazy($key) {
+    public function lazy(string $key) {
         return $this->find($key)->lazy();
     }
 
-    public function factory($key) {
+    public function factory(string $key) {
         return $this->find($key)->factory();
     }
 
-    public function __get($key) {
+    public function __get(string $key) {
         return $this->get($key);
     }
 
