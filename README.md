@@ -87,3 +87,21 @@ $C->register(MyClass::class, static function($C) {
 ```
 
 ### Factory Dependencies
+
+## Documentation
+
+### `$container = new Hotwire\Container()`
+
+### `$C->register(string $name, callable $factory)`
+
+### `$C->registerSingleton(string $name, mixed $factory)`
+
+### `$C->has($key)`
+
+### `$C->get($key)`
+
+### `$C->lazy($key)`
+
+### `$C->factory($key)`
+
+### `$C->__get($key)`
