@@ -114,7 +114,17 @@ Throws `RegistrationNotFoundException` if no registration for `$key` exists.
 
 ### `$C->lazy(string $key)`
 
+Request a lazy instance of `$key` from the container. Returns a callable that returns an instance of the associated dependency. Successive calls will return the same instance.
+
+Use `lazy()` for expensive dependencies that will not always be used by the dependent object.
+
 ### `$C->factory(string $key)`
+
+Request a factory for `$key`. Returns a callable that returns a new instance of the associated dependency for each call.
+
+Attempting to create a `factory()` dependency for a singleton registration is a semantic error and will throw an exception.
+
+Use `factory()` when an object needs to create multiple instances of a dependency, without exposing the container itself.
 
 ### `$C->__get(string $key)`
 
