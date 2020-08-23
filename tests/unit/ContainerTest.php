@@ -12,6 +12,26 @@ class ContainerTest extends TestCase {
         $this->C = new Container();
     }
 
+    //
+    //
+
+    public function testHasReturnsFalseWithoutRegistration() {
+        $this->assertFalse($this->C->has('quux'));
+    }
+
+    public function testHasReturnsTrueWithRegistration() {
+        $this->C->registerSingleton('moose', new Thing);
+        $this->assertTrue($this->C->has('moose'));
+    }
+
+    public function testGetAndPropertyAccessAreEquivalent() {
+        $this->C->registerSingleton('xyzzy', new Thing);
+        $this->assertTrue($this->C->get('xyzzy') === $this->C->xyzzy);
+    }
+
+    //
+    //
+
     public function testFactoryReceivesInstanceOfContainer() {
         $this->C->register('i', function($C) {
             $this->assertTrue($C === $this->C);
@@ -128,5 +148,24 @@ class ContainerTest extends TestCase {
         $t2 = $fact();
 
         $this->assertTrue($t1 !== $t2);
+    }
+
+    public function testFactoryThrowsForSingletonRegistration() {
+        $this->C->registerSingleton('f1', new Thing);
+        $this->C->registerSingleton('f2', static function() {
+            return new Thing;
+        });
+
+        try {
+            $this->C->factory('f1');
+            $this->fail("shouldn't get here");
+        } catch (\Exception $e) {}
+
+        try {
+            $this->C->factory('f2');
+            $this->fail("shouldn't get here");
+        } catch (\Exception $e) {}
+
+        $this->assertTrue(true);
     }
 }
